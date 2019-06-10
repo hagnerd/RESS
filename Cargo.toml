@@ -31,6 +31,7 @@ proptest = "0.8"
 walkdir = "2.2"
 pretty_env_logger = "0.2"
 regex_generate = "0.2.0"
+criterion = "0.2"
 
 [features]
 default = []
@@ -47,3 +48,11 @@ path = "examples/clear-comments/src/main.rs"
 [[example]]
 name = "semi_finder"
 path = "examples/semi_finder/src/main.rs"
+
+[[bench]]
+name = "major_libs"
+harness = false
+
+[[bench]]
+name = "ref_perf_vs"
+harness = false

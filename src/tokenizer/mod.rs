@@ -191,9 +191,135 @@ impl<'a> Tokenizer<'a> {
     }
 
     fn at_keyword(&self) -> Option<Keyword> {
-        KEYWORDS
-            .get(&self.stream.buffer[self.current_start..self.stream.idx])
-            .map(|k| *k)
+        let ident = &self.stream.buffer[self.current_start..self.stream.idx];
+        if ident.eq_ignore_ascii_case(b"await") {
+            Some(Keyword::Await)
+        } else if ident.eq_ignore_ascii_case(b"break") {
+            Some(Keyword::Break)
+
+        } else if ident.eq_ignore_ascii_case(b"case") {
+            Some(Keyword::Case)
+
+        } else if ident.eq_ignore_ascii_case(b"catch") {
+            Some(Keyword::Catch)
+
+        } else if ident.eq_ignore_ascii_case(b"class") {
+            Some(Keyword::Class)
+
+        } else if ident.eq_ignore_ascii_case(b"const") {
+            Some(Keyword::Const)
+
+        } else if ident.eq_ignore_ascii_case(b"continue") {
+            Some(Keyword::Continue)
+
+        } else if ident.eq_ignore_ascii_case(b"debugger") {
+            Some(Keyword::Debugger)
+
+        } else if ident.eq_ignore_ascii_case(b"default") {
+            Some(Keyword::Default)
+
+        } else if ident.eq_ignore_ascii_case(b"delete") {
+            Some(Keyword::Delete)
+
+        } else if ident.eq_ignore_ascii_case(b"do") {
+            Some(Keyword::Do)
+
+        } else if ident.eq_ignore_ascii_case(b"else") {
+            Some(Keyword::Else)
+
+        } else if ident.eq_ignore_ascii_case(b"finally") {
+            Some(Keyword::Finally)
+
+        } else if ident.eq_ignore_ascii_case(b"for") {
+            Some(Keyword::For)
+
+        } else if ident.eq_ignore_ascii_case(b"function") {
+            Some(Keyword::Function)
+
+        } else if ident.eq_ignore_ascii_case(b"if") {
+            Some(Keyword::If)
+
+        } else if ident.eq_ignore_ascii_case(b"instanceof") {
+            Some(Keyword::InstanceOf)
+
+        } else if ident.eq_ignore_ascii_case(b"in") {
+            Some(Keyword::In)
+
+        } else if ident.eq_ignore_ascii_case(b"new") {
+            Some(Keyword::New)
+
+        } else if ident.eq_ignore_ascii_case(b"return") {
+            Some(Keyword::Return)
+
+        } else if ident.eq_ignore_ascii_case(b"switch") {
+            Some(Keyword::Switch)
+
+        } else if ident.eq_ignore_ascii_case(b"this") {
+            Some(Keyword::This)
+
+        } else if ident.eq_ignore_ascii_case(b"throw") {
+            Some(Keyword::Throw)
+
+        } else if ident.eq_ignore_ascii_case(b"try") {
+            Some(Keyword::Try)
+
+        } else if ident.eq_ignore_ascii_case(b"typeof") {
+            Some(Keyword::TypeOf)
+
+        } else if ident.eq_ignore_ascii_case(b"var") {
+            Some(Keyword::Var)
+
+        } else if ident.eq_ignore_ascii_case(b"void") {
+            Some(Keyword::Void)
+
+        } else if ident.eq_ignore_ascii_case(b"while") {
+            Some(Keyword::While)
+
+        } else if ident.eq_ignore_ascii_case(b"with") {
+            Some(Keyword::With)
+
+        } else if ident.eq_ignore_ascii_case(b"export") {
+            Some(Keyword::Export)
+
+        } else if ident.eq_ignore_ascii_case(b"import") {
+            Some(Keyword::Import)
+
+        } else if ident.eq_ignore_ascii_case(b"super") {
+            Some(Keyword::Super)
+
+        } else if ident.eq_ignore_ascii_case(b"enum") {
+            Some(Keyword::Enum)
+
+        } else if ident.eq_ignore_ascii_case(b"implements") {
+            Some(Keyword::Implements)
+
+        } else if ident.eq_ignore_ascii_case(b"interface") {
+            Some(Keyword::Interface)
+
+        } else if ident.eq_ignore_ascii_case(b"package") {
+            Some(Keyword::Package)
+
+        } else if ident.eq_ignore_ascii_case(b"private") {
+            Some(Keyword::Private)
+
+        } else if ident.eq_ignore_ascii_case(b"protected") {
+            Some(Keyword::Protected)
+
+        } else if ident.eq_ignore_ascii_case(b"public") {
+            Some(Keyword::Public)
+
+        } else if ident.eq_ignore_ascii_case(b"static") {
+            Some(Keyword::Static)
+
+        } else if ident.eq_ignore_ascii_case(b"yield") {
+            Some(Keyword::Yield)
+
+        } else if ident.eq_ignore_ascii_case(b"let") {
+            Some(Keyword::Let)
+
+        } else {
+            None
+        }
     }
 
     fn at_bool(&self) -> Option<bool> {
