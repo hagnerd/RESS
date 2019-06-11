@@ -183,7 +183,7 @@ impl<'a> Tokenizer<'a> {
             self.gen_token(RawToken::Keyword(k))
         } else if let Some(b) = self.at_bool() {
             self.gen_token(RawToken::Boolean(b))
-        } else if &self.stream.buffer[self.current_start..self.stream.idx] == b"null" {
+        } else if self.stream.buffer[self.current_start..self.stream.idx].eq_ignore_ascii_case(b"null") {
             self.gen_token(RawToken::Null)
         } else {
             self.gen_token(RawToken::Ident)
@@ -323,10 +323,13 @@ impl<'a> Tokenizer<'a> {
     }
 
     fn at_bool(&self) -> Option<bool> {
-        match &self.stream.buffer[self.current_start..self.stream.idx] {
-            b"true" => Some(true),
-            b"false" => Some(false),
-            _ => None,
+        let s = &self.stream.buffer[self.current_start..self.stream.idx];
+        if s.eq_ignore_ascii_case(b"true") {
+            Some(true)
+        } else if s.eq_ignore_ascii_case(b"false") {
+            Some(false)
+        } else {
+            None
         }
     }
     /// picking up after the \
