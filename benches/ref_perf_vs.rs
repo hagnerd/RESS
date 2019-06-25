@@ -6,9 +6,11 @@ extern crate test;
 extern crate lazy_static;
 #[macro_use]
 extern crate criterion;
+extern crate combine;
+use combine::Parser;
 
 use criterion::{black_box, Criterion};
-use ress::{Scanner, Tokenizer};
+use ress::{Scanner};
 
 static KEYWORDS: &[&str] = &[
     "implements",
@@ -189,7 +191,7 @@ fn keywords(c: &mut Criterion) {
     c.bench_function("keywords", |b| {
         b.iter(|| {
             for key in KEYWORDS {
-                black_box(Tokenizer::new(key).next().unwrap());
+                black_box(ress::refs::keywords::literal().parse(*key).unwrap());
             }
         })
     });
@@ -199,7 +201,7 @@ fn punct(c: &mut Criterion) {
     c.bench_function("punct", |b| {
         b.iter(|| {
             for punct in PUNCTS {
-                black_box(Tokenizer::new(punct).next().unwrap());
+                black_box(ress::refs::punct::punctuation().parse(*punct).unwrap());
             }
         })
     });
@@ -209,7 +211,7 @@ fn strings(c: &mut Criterion) {
     c.bench_function("strings", |b| {
         b.iter(|| {
             for s in STRINGS {
-                black_box(Tokenizer::new(s).next().unwrap());
+                black_box(ress::refs::strings::literal().parse(*s).unwrap());
             }
         })
     });
@@ -219,7 +221,7 @@ fn comments(c: &mut Criterion) {
     c.bench_function("comments", |b| {
         b.iter(|| {
             for c in COMMENTS {
-                black_box(Tokenizer::new(c).next().unwrap());
+                black_box(ress::refs::comments::comment().parse(*c).unwrap());
             }
         })
     });
@@ -229,7 +231,7 @@ fn numbers(c: &mut Criterion) {
     c.bench_function("numbers", |b| {
         b.iter(|| {
             for n in NUMBERS {
-                black_box(Tokenizer::new(n).next().unwrap());
+                black_box(ress::refs::numbers::literal().parse(*n).unwrap());
             }
         })
     });
@@ -239,7 +241,7 @@ fn regex(c: &mut Criterion) {
     c.bench_function("regex", |b| {
         b.iter(|| {
             for r in REGEX {
-                black_box(Tokenizer::new(r).next_regex().unwrap());
+                black_box(ress::refs::regex::regex_tail().parse(*r).unwrap());
             }
         })
     });
@@ -249,16 +251,16 @@ fn templates(c: &mut Criterion) {
     c.bench_function("TEMPLATE_CONTINUATIONS", |b| {
         b.iter(|| {
             for s in TEMPLATE_CONTINUATIONS {
-                let mut t = Tokenizer::new(&s);
-                let _ = t.next().unwrap();
-                black_box(t.next().unwrap());
+                black_box(ress::refs::strings::template_continuation()
+                    .parse(*s)
+                    .unwrap());
             }
         })
     });
     c.bench_function("TEMPLATE_STARTS", |b| {
         b.iter(|| {
             for s in TEMPLATE_STARTS {
-                black_box(Tokenizer::new(s).next().unwrap());
+                black_box(ress::refs::strings::template_start().parse(*s).unwrap());
             }
         })
     });
@@ -268,7 +270,7 @@ fn bools(c: &mut Criterion) {
     c.bench_function("bools", |b| {
         b.iter(|| {
             for b in BOOLS {
-                black_box(Tokenizer::new(b).next().unwrap());
+                black_box(ress::refs::tokens::boolean_literal().parse(*b).unwrap());
             }
         })
     });
@@ -278,7 +280,7 @@ fn null(c: &mut Criterion) {
     c.bench_function("null", |b| {
         b.iter(|| {
             for b in NULL {
-                black_box(Tokenizer::new(b).next().unwrap());
+                black_box(ress::refs::tokens::null_literal().parse(*b).unwrap());
             }
         })
     });
@@ -288,7 +290,7 @@ fn idents(c: &mut Criterion) {
     c.bench_function("idents", |b| {
         b.iter(|| {
             for i in IDENTS {
-                black_box(Tokenizer::new(i).next().unwrap());
+                black_box(ress::refs::tokens::ident().parse(*i).unwrap());
             }
         })
     });
@@ -298,7 +300,7 @@ pub fn token(c: &mut Criterion) {
     c.bench_function("token", |b| {
         b.iter(|| {
             for s in TOKENS.iter() {
-                black_box(Tokenizer::new(s).next().unwrap());
+                black_box(ress::refs::tokens::token().parse(*s).unwrap());
             }
         })
     });
@@ -307,7 +309,7 @@ pub fn token(c: &mut Criterion) {
 fn scanner(c: &mut Criterion) {
     c.bench_function("scanner", |b| {
         b.iter(|| {
-            let s = Scanner::new(&JS);
+            let s = Scanner::new(JS.as_str());
             black_box(s.collect::<Vec<_>>())
         })
     });
@@ -318,3 +320,4 @@ criterion_group!(
     token, scanner
 );
 criterion_main!(benches);
+

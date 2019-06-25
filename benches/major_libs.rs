@@ -34,7 +34,7 @@ lazy_static! {
 fn angular(c: &mut Criterion) {
     c.bench_function("angular", |b| {
         b.iter(|| {
-            for i in Scanner::new(&NG) {
+            for i in Scanner::new(NG.as_str()) {
                 black_box(i);
             }
         })
@@ -44,7 +44,7 @@ fn angular(c: &mut Criterion) {
 fn angular_min(c: &mut Criterion) {
     c.bench_function("angular_min", |b| {
         b.iter(|| {
-            for i in Scanner::new(&NG_MIN) {
+            for i in Scanner::new(NG_MIN.as_str()) {
                 black_box(i);
             }
         })
@@ -54,7 +54,7 @@ fn angular_min(c: &mut Criterion) {
 fn jq(c: &mut Criterion) {
     c.bench_function("jq", |b| {
         b.iter(|| {
-            for i in Scanner::new(&JQ) {
+            for i in Scanner::new(JQ.as_str()) {
                 black_box(i);
             }
         })
@@ -64,7 +64,7 @@ fn jq(c: &mut Criterion) {
 fn jq_min(c: &mut Criterion) {
     c.bench_function("jq_min", |b| {
         b.iter(|| {
-            for i in Scanner::new(&JQ_MIN) {
+            for i in Scanner::new(JQ_MIN.as_str()) {
                 black_box(i);
             }
         })
@@ -74,7 +74,7 @@ fn jq_min(c: &mut Criterion) {
 fn react(c: &mut Criterion) {
     c.bench_function("react", |b| {
         b.iter(|| {
-            for i in Scanner::new(&REACT) {
+            for i in Scanner::new(REACT.as_str()) {
                 black_box(i);
             }
         })
@@ -84,7 +84,7 @@ fn react(c: &mut Criterion) {
 fn react_min(c: &mut Criterion) {
     c.bench_function("react_min", |b| {
         b.iter(|| {
-            for i in Scanner::new(&REACT_MIN) {
+            for i in Scanner::new(REACT_MIN.as_str()) {
                 black_box(i);
             }
         })
@@ -94,7 +94,7 @@ fn react_min(c: &mut Criterion) {
 fn react_dom(c: &mut Criterion) {
     c.bench_function("react_dom", |b| {
         b.iter(|| {
-            for i in Scanner::new(&REACT_DOM) {
+            for i in Scanner::new(REACT_DOM.as_str()) {
                 black_box(i);
             }
         })
@@ -104,7 +104,7 @@ fn react_dom(c: &mut Criterion) {
 fn react_dom_min(c: &mut Criterion) {
     c.bench_function("react_dom_min", |b| {
         b.iter(|| {
-            for i in Scanner::new(&REACT_DOM_MIN) {
+            for i in Scanner::new(REACT_DOM_MIN.as_str()) {
                 black_box(i);
             }
         })
@@ -114,7 +114,7 @@ fn react_dom_min(c: &mut Criterion) {
 fn vue(c: &mut Criterion) {
     c.bench_function("vue", |b| {
         b.iter(|| {
-            for i in Scanner::new(&VUE) {
+            for i in Scanner::new(VUE.as_str()) {
                 black_box(i);
             }
         })
@@ -124,7 +124,7 @@ fn vue(c: &mut Criterion) {
 fn vue_min(c: &mut Criterion) {
     c.bench_function("vue_min", |b| {
         b.iter(|| {
-            for i in Scanner::new(&VUE_MIN) {
+            for i in Scanner::new(VUE_MIN.as_str()) {
                 black_box(i);
             }
         })
@@ -134,7 +134,7 @@ fn vue_min(c: &mut Criterion) {
 fn everything_es5(c: &mut Criterion) {
     c.bench_function("everything_es5", |b| {
         b.iter(|| {
-            black_box(Scanner::new(&EV5).collect::<Vec<_>>());
+            black_box(Scanner::new(EV5.as_str()).collect::<Vec<_>>());
         })
     });
 }
@@ -142,7 +142,7 @@ fn everything_es5(c: &mut Criterion) {
 fn everything_es2015_s(c: &mut Criterion) {
     c.bench_function("everything_es2015_s", |b| {
         b.iter(|| {
-            black_box(Scanner::new(&EV2015).collect::<Vec<_>>());
+            black_box(Scanner::new(EV2015.as_str()).collect::<Vec<_>>());
         })
     });
 }
@@ -150,7 +150,7 @@ fn everything_es2015_s(c: &mut Criterion) {
 fn everything_es2015_m(c: &mut Criterion) {
     c.bench_function("everything_es2015_m", |b| {
         b.iter(|| {
-            for i in Scanner::new(&EVMOD) {
+            for i in Scanner::new(EVMOD.as_str()) {
                 black_box(i);
             }
         })
