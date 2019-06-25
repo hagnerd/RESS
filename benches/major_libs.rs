@@ -35,7 +35,7 @@ fn angular(c: &mut Criterion) {
     c.bench_function("angular", |b| {
         b.iter(|| {
             for i in Scanner::new(&NG) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -45,7 +45,7 @@ fn angular_min(c: &mut Criterion) {
     c.bench_function("angular_min", |b| {
         b.iter(|| {
             for i in Scanner::new(&NG_MIN) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -55,7 +55,7 @@ fn jq(c: &mut Criterion) {
     c.bench_function("jq", |b| {
         b.iter(|| {
             for i in Scanner::new(&JQ) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -65,7 +65,7 @@ fn jq_min(c: &mut Criterion) {
     c.bench_function("jq_min", |b| {
         b.iter(|| {
             for i in Scanner::new(&JQ_MIN) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -75,7 +75,7 @@ fn react(c: &mut Criterion) {
     c.bench_function("react", |b| {
         b.iter(|| {
             for i in Scanner::new(&REACT) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -85,7 +85,7 @@ fn react_min(c: &mut Criterion) {
     c.bench_function("react_min", |b| {
         b.iter(|| {
             for i in Scanner::new(&REACT_MIN) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -95,7 +95,7 @@ fn react_dom(c: &mut Criterion) {
     c.bench_function("react_dom", |b| {
         b.iter(|| {
             for i in Scanner::new(&REACT_DOM) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -105,7 +105,7 @@ fn react_dom_min(c: &mut Criterion) {
     c.bench_function("react_dom_min", |b| {
         b.iter(|| {
             for i in Scanner::new(&REACT_DOM_MIN) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -115,7 +115,7 @@ fn vue(c: &mut Criterion) {
     c.bench_function("vue", |b| {
         b.iter(|| {
             for i in Scanner::new(&VUE) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -125,7 +125,7 @@ fn vue_min(c: &mut Criterion) {
     c.bench_function("vue_min", |b| {
         b.iter(|| {
             for i in Scanner::new(&VUE_MIN) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
@@ -151,7 +151,7 @@ fn everything_es2015_m(c: &mut Criterion) {
     c.bench_function("everything_es2015_m", |b| {
         b.iter(|| {
             for i in Scanner::new(&EVMOD) {
-                black_box(i.unwrap());
+                black_box(i);
             }
         })
     });
