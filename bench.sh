@@ -1,0 +1,1 @@
+cargo +nightly bench && cp ./target/criterion git checkout next && cargo +nightly bench

@@ -30,6 +30,7 @@ walkdir = "2.2"
 pretty_env_logger = "0.2"
 regex_generate = "0.2.0"
 lazy_static = "1"
+criterion = "0.2"
 
 [features]
 default = []
