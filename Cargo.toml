@@ -47,3 +47,11 @@ path = "examples/clear-comments/src/main.rs"
 [[example]]
 name = "semi_finder"
 path = "examples/semi_finder/src/main.rs"
+
+[[bench]]
+name = "major_libs"
+harness = false
+
+[[bench]]
+name = "ref_perf_vs"
+harness = false

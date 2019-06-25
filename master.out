@@ -1,0 +1,60 @@
+
+running 45 tests
+test comments::test::comments_test ... ignored
+test comments::test::html_comments_prop ... ignored
+test comments::test::multi_line_comments_prop ... ignored
+test comments::test::single_line_comments_prop ... ignored
+test keywords::test::future_reserved ... ignored
+test keywords::test::keyword_prop ... ignored
+test keywords::test::reserved_keywords ... ignored
+test keywords::test::strict_mode_reserved ... ignored
+test numeric::test::fail_non_number ... ignored
+test numeric::test::normal_decimal ... ignored
+test punct::test::punct ... ignored
+test refs::comments::test::ref_comments ... ignored
+test refs::keywords::test::ref_keyword ... ignored
+test refs::numbers::test::ref_numbers ... ignored
+test refs::punct::test::gt_eq ... ignored
+test refs::test::ref_scanner ... ignored
+test refs::tokens::test::ref_tokens ... ignored
+test regex::test::localhost_regex_tail ... ignored
+test regex::test::regex_prop ... ignored
+test regex::test::regex_test ... ignored
+test regex::test::url_regex ... ignored
+test strings::test::continuation ... ignored
+test strings::test::double_tail ... ignored
+test strings::test::string_prop ... ignored
+test strings::test::strings ... ignored
+test strings::test::template_head ... ignored
+test strings::test::template_head_unicode_escapes ... ignored
+test strings::test::template_middle ... ignored
+test strings::test::template_no_sub ... ignored
+test strings::test::template_no_sub_escaped ... ignored
+test strings::test::template_tail ... ignored
+test test::get_str ... ignored
+test test::item_deref_to_token ... ignored
+test test::local_host_regex ... ignored
+test test::look_ahead ... ignored
+test test::multiline_template ... ignored
+test test::nested_template ... ignored
+test test::scanner ... ignored
+test test::spans ... ignored
+test test::template_one_sub ... ignored
+test test::template_two_subs ... ignored
+test test::tokenizer ... ignored
+test tokens::test::bool ... ignored
+test tokens::test::eof ... ignored
+test tokens::test::ident_tests ... ignored
+
+test result: ok. 0 passed; 0 failed; 45 ignored; 0 measured; 0 filtered out
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
