@@ -790,6 +790,7 @@ pub enum NumberKind {
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
+#[repr(u8)]
 /// All available punctuation
 pub enum Punct {
     Ampersand,
@@ -1026,6 +1027,7 @@ pub enum CommentKind {
 /// interface
 /// private (40)
 /// public
+#[repr(u8)]
 pub enum Keyword {
     Await,
     Break,
