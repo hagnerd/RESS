@@ -42,7 +42,7 @@ use error::{Error, RawError};
 type Res<T> = Result<T, Error>;
 mod look_behind;
 
-use look_behind::{LookBehind, MetaToken};
+use look_behind::{LookBehind, SmallToken};
 
 /// a convince function for collecting a scanner into
 /// a `Vec<Token>`
@@ -431,21 +431,17 @@ impl<'b> Scanner<'b> {
     /// a regex or is division
     ///
     /// [see this for more details](https://github.com/sweet-js/sweet-core/wiki/design)
+    #[inline]
     fn is_regex_start(&self) -> bool {
         if let Some(ref last_token) = self.last_three.last() {
-            if last_token < &64u8 {
-                last_token == &33u8
-            } else if last_token < &254u8 {
-                if last_token < &75u8 {
-                    true
-                } else if last_token == &75u8 {
-                    false
-                } else if last_token == &76u8  {
-                    self.check_for_conditional()
-                } else if last_token == &74u8 {
-                    self.check_for_func()
-                } else {
-                    true
+            if last_token.is_keyword() {
+                !last_token.is_this()
+            } else if last_token.is_punct() {
+                match last_token {
+                    SmallToken::PunctCloseBracket => false,
+                    SmallToken::PunctCloseParen => self.check_for_conditional(),
+                    SmallToken::PunctCloseBrace => self.check_for_func(),
+                    _ => true,
                 }
             } else {
                 false
@@ -472,12 +468,10 @@ impl<'b> Scanner<'b> {
     /// Check if just passed a conditional expression
     ///
     /// > used in determining if we are at a regex or not
+    #[inline]
     fn check_for_conditional(&self) -> bool {
         if let Some(ref before) = self.before_last_open.last() {
-            before == &23u8 
-            || before == &24u8
-            || before == &39u8
-            || before == &40u8
+            before.is_conditional()
             // before.is_conditional()
             // match before {
             //     MetaToken::Keyword(k) => match k {
@@ -493,97 +487,124 @@ impl<'b> Scanner<'b> {
     /// Check if we just passed a function expression
     ///
     /// > used in determining if we are at a regex or not
+    #[inline]
     fn check_for_func(&self) -> bool {
         if let Some(ref before) = self.before_last_open.last() {
-            if before == &254u8 { // identifier
+            if before.is_ident() {
+            //     if let Some(ref three) = self.before_last_open.three() {
+            //         return Self::check_for_expression(three)
+            //     }
+            // } else if before.is_function() {
+            //     if let Some(ref two) = self.before_last_open.two() {
+            //         return Self::check_for_expression(two);
+            //     } else {
+            //         return false;
+            //     }
+            // }
+            // if before == &254u8 { // identifier
                 if let Some(ref three) = self.before_last_open.three() {
-                    return Self::check_for_expression(three)
+                    return three.indicates_expr();
                 }
-            } else if before == &9u8 { // function
+            // } else if before == &9u8 { // function
+            } else if before.is_function() {
                 if let Some(ref two) = self.before_last_open.two() {
-                    return Self::check_for_expression(two);
+                    return two.indicates_expr();
                 } else {
                     return false;
                 }
             }
         }
         true
-    }
-    /// Check if a token is the beginning of an expression
-    ///
-    /// > used in determining if we are at a regex or not
-    fn check_for_expression(token: &look_behind::SmallToken) -> bool {
-        if token < &42u8 { //keyword
-            token < &9u8
-        } else if token < &118u8 && token > &63u8 { // punct
-            token < &114
-        } else {
-            false
-        }
-        // match token {
-        //     MetaToken::Punct(p) => match p {
-        //         Punct::OpenParen => true,
-        //         Punct::OpenBrace => true,
-        //         Punct::OpenBracket => true,
-        //         Punct::Equal => true,
-        //         Punct::PlusEqual => true,
-        //         Punct::DashEqual => true,
-        //         Punct::AsteriskEqual => true,
-        //         Punct::DoubleAsteriskEqual => true,
-        //         Punct::ForwardSlashEqual => true,
-        //         Punct::PercentEqual => true,
-        //         Punct::DoubleLessThanEqual => true,
-        //         Punct::DoubleGreaterThanEqual => true,
-        //         Punct::TripleGreaterThanEqual => true,
-        //         Punct::AmpersandEqual => true,
-        //         Punct::PipeEqual => true,
-        //         Punct::CaretEqual => true,
-        //         Punct::Comma => true,
-        //         Punct::Plus => true,
-        //         Punct::Dash => true,
-        //         Punct::Asterisk => true,
-        //         Punct::DoubleAsterisk => true,
-        //         Punct::ForwardSlash => true,
-        //         Punct::Percent => true,
-        //         Punct::DoublePlus => true,
-        //         Punct::DoubleDash => true,
-        //         Punct::DoubleLessThan => true,
-        //         Punct::DoubleGreaterThan => true,
-        //         Punct::TripleGreaterThan => true,
-        //         Punct::Ampersand => true,
-        //         Punct::Pipe => true,
-        //         Punct::Caret => true,
-        //         Punct::Bang => true,
-        //         Punct::Tilde => true,
-        //         Punct::DoubleAmpersand => true,
-        //         Punct::DoublePipe => true,
-        //         Punct::QuestionMark => true,
-        //         Punct::Colon => true,
-        //         Punct::TripleEqual => true,
-        //         Punct::DoubleEqual => true,
-        //         Punct::GreaterThanEqual => true,
-        //         Punct::LessThanEqual => true,
-        //         Punct::LessThan => true,
-        //         Punct::GreaterThan => true,
-        //         Punct::BangEqual => true,
-        //         Punct::BangDoubleEqual => true,
-        //         _ => false,
-        //     },
-        //     MetaToken::Keyword(k) => match k {
-        //         Keyword::Case => true,
-        //         Keyword::Delete => true,
-        //         Keyword::In => true,
-        //         Keyword::InstanceOf => true,
-        //         Keyword::New => true,
-        //         Keyword::Return => true,
-        //         Keyword::Throw => true,
-        //         Keyword::TypeOf => true,
-        //         Keyword::Void => true,
-        //         _ => false,
-        //     },
-        //     _ => false,
+        // if let Some(ref before) = self.before_last_open.last() {
+        //     if before == &MetaToken::Ident {
+        //         if let Some(ref three) = self.before_last_open.three() {
+        //             return Self::check_for_expression(three)
+        //         }
+        //     } else if before == &MetaToken::Keyword(Keyword::Function) {
+        //         if let Some(ref two) = self.before_last_open.two() {
+        //             return Self::check_for_expression(two);
+        //         } else {
+        //             return false;
+        //         }
+        //     }
         // }
+        // true
     }
+    // /// Check if a token is the beginning of an expression
+    // ///
+    // /// > used in determining if we are at a regex or not
+    // fn check_for_expression(token: &look_behind::SmallToken) -> bool {
+    //     if token < &42u8 { //keyword
+    //         token < &9u8
+    //     } else if token < &118u8 && token > &63u8 { // punct
+    //         token < &114
+    //     } else {
+    //         false
+    //     }
+    //     // match token {
+    //     //     MetaToken::Punct(p) => match p {
+    //     //         Punct::OpenParen => true,
+    //     //         Punct::OpenBrace => true,
+    //     //         Punct::OpenBracket => true,
+    //     //         Punct::Equal => true,
+    //     //         Punct::PlusEqual => true,
+    //     //         Punct::DashEqual => true,
+    //     //         Punct::AsteriskEqual => true,
+    //     //         Punct::DoubleAsteriskEqual => true,
+    //     //         Punct::ForwardSlashEqual => true,
+    //     //         Punct::PercentEqual => true,
+    //     //         Punct::DoubleLessThanEqual => true,
+    //     //         Punct::DoubleGreaterThanEqual => true,
+    //     //         Punct::TripleGreaterThanEqual => true,
+    //     //         Punct::AmpersandEqual => true,
+    //     //         Punct::PipeEqual => true,
+    //     //         Punct::CaretEqual => true,
+    //     //         Punct::Comma => true,
+    //     //         Punct::Plus => true,
+    //     //         Punct::Dash => true,
+    //     //         Punct::Asterisk => true,
+    //     //         Punct::DoubleAsterisk => true,
+    //     //         Punct::ForwardSlash => true,
+    //     //         Punct::Percent => true,
+    //     //         Punct::DoublePlus => true,
+    //     //         Punct::DoubleDash => true,
+    //     //         Punct::DoubleLessThan => true,
+    //     //         Punct::DoubleGreaterThan => true,
+    //     //         Punct::TripleGreaterThan => true,
+    //     //         Punct::Ampersand => true,
+    //     //         Punct::Pipe => true,
+    //     //         Punct::Caret => true,
+    //     //         Punct::Bang => true,
+    //     //         Punct::Tilde => true,
+    //     //         Punct::DoubleAmpersand => true,
+    //     //         Punct::DoublePipe => true,
+    //     //         Punct::QuestionMark => true,
+    //     //         Punct::Colon => true,
+    //     //         Punct::TripleEqual => true,
+    //     //         Punct::DoubleEqual => true,
+    //     //         Punct::GreaterThanEqual => true,
+    //     //         Punct::LessThanEqual => true,
+    //     //         Punct::LessThan => true,
+    //     //         Punct::GreaterThan => true,
+    //     //         Punct::BangEqual => true,
+    //     //         Punct::BangDoubleEqual => true,
+    //     //         _ => false,
+    //     //     },
+    //     //     MetaToken::Keyword(k) => match k {
+    //     //         Keyword::Case => true,
+    //     //         Keyword::Delete => true,
+    //     //         Keyword::In => true,
+    //     //         Keyword::InstanceOf => true,
+    //     //         Keyword::New => true,
+    //     //         Keyword::Return => true,
+    //     //         Keyword::Throw => true,
+    //     //         Keyword::TypeOf => true,
+    //     //         Keyword::Void => true,
+    //     //         _ => false,
+    //     //     },
+    //     //     _ => false,
+    //     // }
+    // }
     
     /// Get a string for any given span
     pub fn string_for(&self, span: &Span) -> Option<String> {
