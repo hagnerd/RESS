@@ -199,7 +199,7 @@ Now when we find an `{` we can see if it is a block, if the token before is a `)
 
 ```rust
 struct Paren {
-  is_conditiona: bool,
+  is_conditional: bool,
   is_func_expr: bool,
 }
 
